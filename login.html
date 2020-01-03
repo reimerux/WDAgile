@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/login.js"></script>
+    <link href="kanban.css" rel=stylesheet type="text/css">
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm sticky-top css-2t4gi3-Header__HeaderShell">
+        <a class="navbar-brand" href="#"><img src="img/ck-dub-logo-white.svg" height="32" width="32" alt="Workday" class="img-fluid"></a>
+    </nav>
+
+<p></p>
+<section class="container">
+<div class="form-signin">
+
+    <h1 class="h3 mb-3 font-weight-normal">Connect with Workday Tenant</h1>
+
+    <div id="loginfields">
+        <label for="wdurl" class="sr-only">Workday URL:</label>
+        <input type="text" id="wdurl" value="https://api.workday.com"  class="form-control" placeholder="Workday URL" required autofocus>
+        <label for="clientID" class="sr-only">API Client ID</label>
+        <input type="text" id="clientID" size = "32" value="NjRhMmFkOTQtNzkwNC00NTc0LTkwMjQtZTAwYmZiYjI2YzE5" class="form-control" placeholder="API Client ID" required>
+        <p class="mt-5 mb-3 text-muted" id="pageData" />
+        <div id="tokendiv"><label for="token"  ></label>
+            <input type="text" id="token" size = "32" class="form-control" placeholder="Access Token"></div>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" id="login" onclick="genToken()">Log Into WCP</button>
+    <button class="btn btn-lg btn-primary btn-block" id="next" onclick="toHome()">Home</button>
+
+    </div>
+</section>
+
+</body>
+<script>Initialize();</script>  <!-- called onload - see jsfuncs.js -->
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- javascrip library for this page-->
+    <script src="js/kanban.js"></script>
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/index.js"></script>
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="kanban.css" rel=stylesheet type="text/css">
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+<body>
+    <nav class="navbar navbar-expand-sm sticky-top css-2t4gi3-Header__HeaderShell">
+        <a class="navbar-brand col-md-5 mr-0"><img src="img/ck-dub-logo-white.svg" height="32" width="32" alt="Workday" class="img-fluid"></a>
+        <span class="col-md-6 "><h3>Agile Boards</h3></span>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <button class="css-qe36ns-ButtonBase__ButtonBaseCon" id="LogIn2" onclick="window.location.href = 'login.html'">Log In</button>
+            </li>
+        </ul>
+    </nav>
+<div class="container-fluid">
+<div class="row">
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="img/wd-applet-custom-dashboards-workforce-planning.svg">
+                    <div class="card-body">
+                        <h5 class="card-title">Kanban Board</h5>
+                        <p class="card-text">Maintain Project-based work queue with WIP limits.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" onclick="window.location.href = 'kanban.html'" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" onclick="window.location.href = 'kanbanConfig.html'" class="btn btn-sm btn-outline-secondary">Config</button>
+                            </div>
+                            <small class="text-muted"><span id="kanbanCount"></span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="img/wd-applet-custom-dashboards-talent-management.svg">
+                    <div class="card-body">
+                        <h5 class="card-title">Scrum Board</h5>
+                        <p class="card-text">Maintain Team workload across multiple work streams.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" onclick="window.location.href = 'scrum.html'" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" onclick="window.location.href = 'config.html'" class="btn btn-sm btn-outline-secondary">Config</button>
+                            </div>
+                            <small class="text-muted"><span id="scrumCount"></span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+<p id="pageData"></p>
+</div>
+</body>
+<script>
+    Initialize()
+</script>
+</html>

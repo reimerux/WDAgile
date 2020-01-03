@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/config.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="kanban.css" rel=stylesheet type="text/css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark navbar-expand-sm sticky-top css-2t4gi3-Header__HeaderShell">
+        <a class="navbar-brand" href="#"><img src="img/ck-dub-logo-white.svg" height="32" width="32" alt="Workday" class="img-fluid"></a>
+    </nav>
+
+<p></p>
+<section class="container">
+
+
+    <h1 class="h3 mb-3 font-weight-normal">Configure Workday Kanban</h1>
+
+
+    <label for="backlog" class="col-form-label">Backlog Phase</label>
+    <!--<input type="text" id="backlog" class="form-control" placeholder="Backlog Phase WID" required autofocus>-->
+    <span id="backlog"></span>
+    <small id="backlogHelp" class="form-text text-muted">Determines which project phase is holding the backlog.</small>
+    <br>
+    <label for="defaultTask" class="">Default Task</label>
+    <input type="text" id="defaultTask" class="form-control" placeholder="Default Task" required>
+    <small id="defaultTaskHelp" class="form-text text-muted">Determines which project task is used by default for newly generated tasks.</small>
+    <br>
+    <label for="currentSprint" class="">Current Sprint</label>
+    <span id="currentSprint"></span>
+    <small id="currentSprintHelp" class="form-text text-muted">Determines which phase is selected when initially loading the project.</small>
+    <br>
+    <span id="scrumTeam"></span>
+    <small id="ScrumTeamHelp" class="form-text text-muted">Sets the scrum teams defintion as "project role" and "sub category".</small>
+    <p id="usermsg"></p><br>
+
+    <button class="btn btn-lg btn-primary btn-block" id="login" onclick="updateConfig()">Update</button>
+    <button class="btn btn-lg btn-primary btn-block" id="next" onclick="window.location.href = 'index.html'">Home</button>
+
+
+</section>
+
+</body>
+<script>
+    loadConfig();
+</script>
+</html>

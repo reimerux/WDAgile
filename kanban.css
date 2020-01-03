@@ -1,0 +1,74 @@
+.card.draggable {
+    margin-bottom: 1rem;
+    cursor: grab;
+}
+
+.droppable {
+    background-color: var(--success);
+    min-height: 120px;
+    margin-bottom: 1rem;
+}
+
+        .css-2t4gi3-Header__HeaderShell {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    height: 64px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 16px 0px;
+    color: rgb(255, 255, 255);
+    z-index: 4;
+    background: linear-gradient(to right bottom, rgb(8, 117, 225), rgb(0, 92, 185));
+    }
+
+    .css-1c3oqol-SearchBar__SearchForm {
+    position: relative;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    margin-left: 24px;
+}
+
+.css-1llt5ap-DubLogoTitle__Lockup {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 64px;
+    padding-left: 24px;
+    background: none;
+}
+
+.css-qe36ns-ButtonBase__ButtonBaseCon {
+    box-sizing: border-box;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: none;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+    background-color: rgb(8, 117, 225);
+    color: rgb(255, 255, 255);
+    min-width: 96px;
+    height: 40px;
+    border-radius: 999px;
+    border-width: 2px;
+    border-style: solid;
+    border-image: initial;
+    outline: none;
+    transition: all 120ms linear 0s;
+    border-color: transparent;
+    padding: 0px 16px;
+}

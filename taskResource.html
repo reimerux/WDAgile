@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/taskResource.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+
+    <!--<link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sign-in/">-->
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark navbar-expand-sm sticky-top bg-primary">
+        <a class="navbar-brand" href="#"><img src="img/workday-icon-9.jpg" height="48" width="48" alt="Workday" class="img-fluid"></a>
+    </nav>
+
+<p></p>
+<section class="container">
+<div class="form-signin">
+
+    <h1 class="h3 mb-3 font-weight-normal">Connect with Workday Tenant</h1>
+
+    <div id="loginfields">
+        <label for="projectID" class="sr-only">ProjectID:</label>
+        <input type="text" id="projectID" value="cc6e3f3fe96601dc2ec3840f140018e5"  class="form-control" placeholder="Workday URL" required autofocus>
+        <p class="mt-5 mb-3 text-muted" id="pageData" />
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" id="login" onclick="loadResources()">Load Resources</button>
+    <button class="btn btn-lg btn-primary btn-block" id="next" onclick="toHome()">Home</button>
+
+    <input type="text" id="resourcePlanLineID"  class="form-control" placeholder="Resource Plan Line" required autofocus>
+    <input type="text" id="resourceID"  class="form-control" placeholder="Resource" required autofocus>
+    <input type="text" id="projectPlanID" class="form-control" placeholder="Project Plan" required autofocus>
+    <button class="btn btn-lg btn-primary btn-block" id="post" onclick="postResources()">Create Task Resources</button>
+    <p class="mt-5 mb-3 text-muted" id="pageResponse" />
+    </div>
+</section>
+</body>
+</html>
