@@ -41,6 +41,10 @@
 			saveGlobalVars();
 
             var redir = window.location.origin;
+            if (redir == "https://reimerux.github.io")
+            {
+                redir += "/WDAgile"
+            }
             auth_url = global_tenantURI.replace('api','auth.api') + "/v1/authorize?response_type=token&client_id=" +
                 global_ClientId + "&redirect_uri=" + redir + "/login.html";
 
