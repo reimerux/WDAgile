@@ -34,7 +34,7 @@
         {
             //loads the Kanban board for the project & sprint
 
-            var href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+projectPlanTask%2CpercentComplete%2Corder1%2CstartDate%2CendDate%2CprojectTask%2Cmemo%2CtaskResources%2CprojectPlanPhase+FROM+projectPlanTasks%28dataSourceFilter%3DprojectPlanTasksForProjectsProjectHierarchies%2CprojectsAndProjectHierarchies%3D%22"+projectID+"%22%29+ORDER BY order1";
+            var href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+projectPlanTask%2Cproject%2CpercentComplete%2Corder1%2CstartDate%2CendDate%2CprojectTask%2Cmemo%2CtaskResources%2CprojectPlanPhase+FROM+projectPlanTasks%28dataSourceFilter%3DprojectPlanTasksForProjectsProjectHierarchies%2CprojectsAndProjectHierarchies%3D%22"+projectID+"%22%29+ORDER BY order1";
             tasks = REST_WCP('GET',href, sessionStorage.getItem('accessToken')); // make the ajax WS call - see jsfuncs.js
             buildKanbanBoard(tasks,href)
 
@@ -134,7 +134,7 @@
 
               var resourceCount = task.taskResources != null ? task.taskResources.length : 0;
               var memo = task.memo != null ? JSON.parse(task.memo) : {"name":"","description":"","effort":0};
-              var answer = "<div class='card draggable shadow-sm' id='card"+id+"' draggable='true' ondragstart='drag(event)'><div class='card-body p-2'><div class='card-title'><span class='float-right'>"+ resourceCount +"</span><img src='img/wd-icon-user.svg' height='24' width='24' class='rounded-circle float-right'><p class='lead font-weight-bold'>"+ memo.name +"</p></div><p id='type' class='font-weight-light'>" + task.projectTask.descriptor + "</p><p style='display: none;' id='description'>" + memo.description + "</p><p class='small font-weight-light' id='effort'>Effort: "+ memo.effort + " pts.</p><p id='order' style='display: none;'>"+task.order1+"</p><p id='WID' style='display: none;'>SPLIT" + task.projectPlanTask.id + "SPLIT</p><p style='display: none;' id='sprint'>" + task.projectPlanPhase.id + "</p><p style='display: none;' id='startDate'>" + task.startDate + "</p><p style='display: none;' id='endDate'>" + task.endDate + "</p><button class='btn btn-secondary btn-sm' onclick='editTask(this,\""+task.projectPlanTask.id+"\");'>Edit</button></div></div>"
+              var answer = "<div class='card draggable shadow-sm' id='card"+id+"' draggable='true' ondragstart='drag(event)'><div class='card-body p-2'><div class='card-title'><span class='float-right'>"+ resourceCount +"</span><img src='img/wd-icon-user.svg' height='24' width='24' class='rounded-circle float-right'><p class='lead font-weight-bold'>"+ memo.name +"</p></div><p id='type' class='font-weight-light'>" + task.projectTask.descriptor + "</p><p style='display: none;' id='description'>" + memo.description + "</p><p class='small font-weight-light effort' id='effort'>"+ memo.effort + " pts.</p><p class='data' style='display: none;' id='taskData'>" + JSON.stringify(task) + "</p><button class='btn btn-secondary btn-sm' onclick='editTask(this,\""+task.projectPlanTask.id+"\");'>Edit</button></div></div>"
               return answer
           }
 

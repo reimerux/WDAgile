@@ -19,9 +19,10 @@ const drag = (event) => {
        event.preventDefault();
        const data = event.dataTransfer.getData("text/plain");
        const element = document.querySelector(`#${data}`);
-       var originID = $(`#${data}`)[0].innerHTML.split("SPLIT")[1];
+       //var originID = $(`#${data}`)[0].innerHTML.split("SPLIT")[1];
+       var originID = jQuery.parseJSON($(`#${data}`)[0].getElementsByClassName('data')[0].innerText).projectPlanTask.id;
        var destinationVal =  event.target.id;
-       var newOrderID = newOrder(event.target,$(`#${data}`)[0].children[0].children[4].innerText);
+       var newOrderID = newOrder(event.target);
        console.warn("Dragged item: " + originID + " / Destination: " + destinationVal + " / New Order: " + newOrderID);
        saveWDTask(originID,destinationVal,newOrderID);
        try {
@@ -157,60 +158,26 @@ const drag = (event) => {
 
         }
 
-    function saveTask()
-        {
-             //saves the task after changes were made in edit modal
-
-             //create a new task
-             href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planTasks/" + $('#taskID').val();
-             var payload = { "memo": parseMemoSave( $('#taskMemo').val(), $('#taskDescription').val(), $('#taskEffort').val())};
-             REST_PATCH(href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
-             $('#modalTask').modal('hide');
-             loadKanban($('#projectID').val());
-        }
-
-    function editTask(element, taskID)
+    function editTask(element)
         {
             //opens up the modal window for task editing (description & story points = memo, task resources)
 
-            $('#taskID').val(taskID);
-            $('#modalTitle').text("Edit Task: " + element.parentElement.children[0].children[2].innerText)
-            $('#taskMemo').val(element.parentElement.children[0].children[2].innerText);
-            $('#taskDescription').val(element.parentElement.children[2].innerText);
-            $('#taskEffort').val(element.parentElement.children[3].innerText.split(' ')[1]);
-            var dates = element.parentElement.children[7].innerText != "undefined" ? "started on " + element.parentElement.children[7].innerText : "";
-            dates += element.parentElement.children[8].innerText != "undefined" ? " & completed on " + element.parentElement.children[8].innerText : "";
+            card = element.parentNode.parentNode;
+            task = jQuery.parseJSON(card.getElementsByClassName('data')[0].innerText);
+            $('#taskID').val(task.projectPlanTask.id);
+            $('#modalTitle').text("Edit Task: " + JSON.parse(task.memo).name)
+            $('#taskMemo').val(JSON.parse(task.memo).name);
+            $('#taskDescription').val(JSON.parse(task.memo).description);
+            $('#taskEffort').val(JSON.parse(task.memo).effort);
+            var dates = task.startDate != null ? "started on " + task.startDate : "";
+            dates += task.endDate != null ? " & completed on " + task.endDate : "";
             $('#taskDates').text(dates);
-            buildResourceTags(taskID);
-            loadResource($('#projectID').val());
+            buildResourceTags(task.projectPlanTask.id);
+            loadResource(task.project.id);
             removeAssignedResource();
             $('#modalTask').modal('show');
         }
 
-     function moveBacklog(element, taskID)
-        {
-            //opens up the modal window for switching sprints
-
-            $('#taskID2').val(taskID);
-            var sprint = element.parentElement.childNodes[4].innerText;
-            $('#currSprint').html(document.getElementById("sprints").innerHTML);
-            $('#currSprint').children().children().val(sprint);
-            $('#currSprint').children().children().prop( "disabled", true );
-            $('#newSprint').html(document.getElementById("sprints").innerHTML);
-            removeAssignedSprint();
-            $('#modalSprint').modal('show');
-        }
-
-    function saveSprint(element, taskID)
-        {
-            // saves data after story has been assigned a new sprint
-
-            href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planTasks/" + $('#taskID2').val();
-            var payload = { "phase": { "id" : $('#newSprint').children().children().val()}};
-            REST_PATCH(href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
-            $('#modalSprint').modal('hide');
-            loadProject($('#projectID').val());
-        }
 
     function parseMemoSave(name,description,effort)
         {
@@ -300,8 +267,8 @@ const drag = (event) => {
 
         var sum = 0;
         for (i = 0; i < obj.length; i++) {
-                          a = obj[i].getElementsByTagName("p")[3];
-                          sum = sum + Number(a.innerText.split(" ")[1]);
+                          a = obj[i].getElementsByClassName("effort");
+                          sum = sum + Number(a[0].innerText.split(" ")[0]);
                          }
         return sum;
     }
@@ -474,10 +441,13 @@ const drag = (event) => {
            return answer
        }
 
-    function newOrder(element,currentOrder)
+    function newOrder(element)
     {
-        var priorOrder = element.previousSibling != null ? element.previousSibling.children[0].children[4].innerText: "NA";
-        var nextOrder = element.nextSibling != null ? element.nextSibling.children[0].children[4].innerText: "NA";
+        card = element.parentNode.parentNode;
+        task = jQuery.parseJSON(card.getElementsByClassName('data')[0].innerText);
+        currentOrder = task.order1 != null ? task.order1 : "";
+        var priorOrder = element.previousSibling != null ? jQuery.parseJSON(element.previousSibling.getElementsByClassName('data')[0].innerText).order1: "NA";
+        var nextOrder = element.nextSibling != null ? jQuery.parseJSON(element.nextSibling.getElementsByClassName('data')[0].innerText).order1: "NA";
         var newOrder = nextChar(priorOrder)
 
         //Exceptions

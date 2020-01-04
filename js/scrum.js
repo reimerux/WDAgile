@@ -35,13 +35,13 @@
                  $('teamName').text(teamName);
 
     	        //load sprint list
-    	        //var href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planPhases?project=" + projectID;
-    	        //var sprints = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),''); // make the ajax WS call - see jsfuncs.js
-                //buildSprintList(sprints);
+                var href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+workdayID%2CprojectPhaseName+FROM+projectPhase";
+                response = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),""); // make the ajax WS call - see jsfuncs.js
+                sprints = filterSprints(response.responseJSON.data);
+                buildSprintList(sprints);
 
                 //load project details - for each Project
-                var content = '<div class="mr-2" id="projectsSelect">';
-                //var content = '<ul class="list-group list-group-flush" id="projectsSelect"><li class="list-group-item">';
+                var content = '<div class="btn-group" id="projectsSelect">';
                 $.each(projects.responseJSON.data, function(key, value)
                 {
                     projectID = projects.responseJSON.data[key].project[0].id
@@ -61,10 +61,36 @@
                 return false;
             }
 
-
-    function selectSprint(element)
+    function filterSprints(response)
     {
-        $(element).button('toggle');
+        var sprints =[];
+        $.each(response , function (key,value)
+        {
+
+        if (response[key].projectPhaseName.includes("Scrum"))
+        {
+            sprints.push(response[key])
+        }
+        });
+        return sprints;
+    }
+
+
+    function selectProject(element)
+    {
+        //toggle selected buttons (and associated checkbox)
+        if (element.children[0].checked)
+        {
+            element.children[0].checked = false;
+            $(element).removeClass('btn-success');
+            $(element).addClass('btn-light');
+        }
+        else
+        {
+            element.children[0].checked = true;
+            $(element).addClass('btn-success');
+            $(element).removeClass('btn-light');
+        };
         loadScrumBoard();
     }
 
@@ -77,13 +103,15 @@
 
             var href;
             var tasks = [];
+            var projectsSelect = [];
             $.each(projects, function(key, value)
                             {
 
-                                if (projects[key].classList.contains('focus'))
+                                if (projects[key].children[0].checked)
                                 {
-                                    projectID = projects[key].id;
-                                    href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+project%2CprojectPlanTask%2CpercentComplete%2Corder1%2CprojectTask%2Cmemo%2CtaskResources%2CprojectPlanPhase+FROM+projectPlanTasks%28dataSourceFilter%3DprojectPlanTasksForProjectsProjectHierarchies%2CprojectsAndProjectHierarchies%3D%22"+projectID+"%22%29 ORDER BY order1" //+WHERE+projectPlanPhase%3D%22"+sprintID+"%22 ORDER BY order1";
+                                    projectID = projects[key].children[0].value;
+                                    projectsSelect.push(projects[key].innerText);
+                                    href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+project%2CprojectPlanTask%2CprojectPhase%2CpercentComplete%2Corder1%2CprojectTask%2Cmemo%2CtaskResources%2CprojectPlanPhase+FROM+projectPlanTasks%28dataSourceFilter%3DprojectPlanTasksForProjectsProjectHierarchies%2CprojectsAndProjectHierarchies%3D%22"+projectID+"%22%29 ORDER BY order1" //+WHERE+projectPlanPhase%3D%22"+sprintID+"%22 ORDER BY order1";
                                     response = REST_WCP('GET',href, sessionStorage.getItem('accessToken')); // make the ajax WS call - see jsfuncs.js
                                     var jdata = jQuery.parseJSON(response.responseText)
                                     $.each(jdata.data, function(key, value)
@@ -92,6 +120,7 @@
                                         });
                                 }
                             });
+            //document.getElementById("projectButtonsTest").innerText = JSON.stringify(projectsSelect);
             buildScrumBoard(tasks,href);
 
             return false;
@@ -109,8 +138,7 @@
                   else
                   {
                     var jdata = jQuery.parseJSON(resObject.responseText);
-                    response  = "<button data-toggle='button' class='btn btn-primary active' onClick='selectSprint(this);' id='"+jdata.id+"' checked>"+jdata.name+"</button>"
-                    //response = "<div class='checkbox-inline' onChange='loadScrumBoard();'><label><input type='checkbox' class='checkbox' value="+jdata.id+" checked>"+jdata.name+"</label></div>"
+                    response = "<button class='btn btn-success' type='button' onClick='selectProject(this);'><input type='checkbox' class='checkbox' value="+jdata.id+" hidden=true checked>"+jdata.name+"</button>"
                   }
                   return response;
            }
@@ -139,44 +167,35 @@
         }
 
 
-    function buildSprintList(resObject, req)
+    function buildSprintList(resObject)
         {
 
             //creates the drop down for the sprints based on project plan phases
 
-            if(resObject.status != 200)
-                       {
-                           document.getElementById("pageData").innerHTML = "Request: " + req + "<br/>Error Fetching Project Tasks:<br/>Status: " + resObject.status + " (" + resObject.statusText + ")<br/>" + resObject.responseText;
-                       }
-                       else
-                       {
-                       var jdata = jQuery.parseJSON(resObject.responseText);
-                       var content = "<div class='form-group'><select class='form-control' onchange='loadScrumBoard(\""+ $("#projectID").val() +"\");' id='sprintSelect1'>"
+           var jdata = resObject;
+           var content = "<div class='form-group'><select class='form-control' onchange='loadScrumBoard();' id='sprintSelect1'>"
 
-                       $.each(jdata.data, function(key, value)
-                       {
-                            var txnName = jdata.data[key].descriptor != null ? jdata.data[key].descriptor : "N/A";
-                            var txnID = jdata.data[key].id != null ? jdata.data[key].id : 0;
-                            var txnPhase = jdata.data[key].phase.id != null ? jdata.data[key].phase.id : 0;
-                            var defaultSprint = jdata.data[key].phase.id == localStorage.getItem('currentSprint') ? "selected='selected'" : "";
-                            var txnName = jdata.data[key].phase.id == localStorage.getItem('currentSprint') ? txnName + " (Current)" : txnName;
+           $.each(jdata, function(key, value)
+           {
+                var txnName = jdata[key].projectPhaseName != null ? jdata[key].projectPhaseName : "N/A";
+                var txnID = jdata[key].workdayID != null ? jdata[key].workdayID : 0;
+                var defaultSprint = jdata[key].workdayID == localStorage.getItem('currentSprint') ? "selected='selected'" : "";
+                var txnName = jdata[key].workdayID == localStorage.getItem('currentSprint') ? txnName + " (Current)" : txnName;
 
-                            content +=  "<option value='"+txnID +"' "+defaultSprint+">" +txnName+"</option>"
-                       });
+                content +=  "<option value='"+txnID +"' "+defaultSprint+">" +txnName+"</option>"
+           });
 
 
-                            content += "</select></div>"
+                content += "</select></div>"
 
-                         document.getElementById("sprints").innerHTML = content;
-                         }
-                         return false;
+             document.getElementById("sprints").innerHTML = content;
+
         }
 
-    function buildScrumBoard(resObject, req)
+    function buildScrumBoard(jdata)
                 {
 
                    var dz = '<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)"> &nbsp; </div>';
-                   var jdata = resObject
                    var ret_tasks_todo = "<div class='items border border-light'>" + dz;
                    var ret_tasks_inprog = "<div class='items border border-light'>" + dz;
                    var ret_tasks_review = "<div class='items border border-light'>" + dz;
@@ -184,23 +203,26 @@
 
                    $.each(jdata, function(key, value)
                    {
-                        var txnpercent = jdata[key].percentComplete != null ? jdata[key].percentComplete : 0;
+                        //filter out the non-selected-sprint tasks
+                        if (jdata[key].projectPhase.id == document.getElementById("sprintSelect1").value){
+                            var txnpercent = jdata[key].percentComplete != null ? jdata[key].percentComplete : 0;
 
-                        if (txnpercent>0 && txnpercent<0.75 )
-                        {
-                           ret_tasks_inprog += addScrumCard(key,jdata[key],0.25) + dz
-                        }
-                         else if (txnpercent >0.74 && txnpercent<1)
-                        {
-                           ret_tasks_review += addScrumCard(key,jdata[key],0.75) + dz
-                        }
-                         else if (txnpercent ==1)
-                        {
-                           ret_tasks_comp += addScrumCard(key,jdata[key],1) + dz
-                        }
-                          else
-                        {
-                           ret_tasks_todo += addScrumCard(key,jdata[key],0) + dz
+                            if (txnpercent>0 && txnpercent<0.75 )
+                            {
+                               ret_tasks_inprog += addScrumCard(key,jdata[key],0.25) + dz
+                            }
+                             else if (txnpercent >0.74 && txnpercent<1)
+                            {
+                               ret_tasks_review += addScrumCard(key,jdata[key],0.75) + dz
+                            }
+                             else if (txnpercent ==1)
+                            {
+                               ret_tasks_comp += addScrumCard(key,jdata[key],1) + dz
+                            }
+                              else
+                            {
+                               ret_tasks_todo += addScrumCard(key,jdata[key],0) + dz
+                            }
                         }
                    });
 
@@ -233,10 +255,55 @@
                 //create a new task
                 href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planTasks/" + $('#taskID').val();
                 var payload = { "memo": parseMemoSave( $('#taskMemo').val(), $('#taskDescription').val(), $('#taskEffort').val())};
-                REST_PATCH(href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
+                REST_WCP('PATCH',href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
                 $('#modalTask').modal('hide');
-                loadScrumBoard($('#projectID').val());
+                loadScrumBoard();
            }
+
+     function moveSprint(element)
+            {
+                //opens up the modal window for switching sprints
+
+                var card = element.parentNode.parentNode;
+                var task = jQuery.parseJSON(card.getElementsByClassName('data')[0].innerText);
+                var sprint = task.projectPhase.id;
+                $('#taskID2').val(task.projectPlanTask.id)
+                $('#projectID2').val(task.project.id)
+                $('#currSprint').html(document.getElementById("sprints").innerHTML);
+                $('#currSprint').children().children().val(sprint);
+                $('#currSprint').children().children().prop( "disabled", true );
+                $('#newSprint').html(document.getElementById("sprints").innerHTML);
+                removeAssignedSprint();
+                $('#modalSprint').modal('show');
+            }
+
+       function saveSprint(element)
+            {
+                // saves data after story has been assigned a new sprint
+
+                href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planTasks/" + $('#taskID2').val();
+                var payload = { "phase": { "id" : convertProjectPhaseToPlanPhase($('#newSprint').children().children().val(),$('#projectID2').val())}};
+                REST_WCP('PATCH',href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
+                $('#modalSprint').modal('hide');
+                loadScrumBoard();
+            }
+
+        function convertProjectPhaseToPlanPhase(phase,projectID)
+        {
+            //load sprint list
+            var href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planPhases?project=" + projectID;
+            var sprints = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),'').responseJSON; // make the ajax WS call - see jsfuncs.js
+            var response;
+
+            $.each(sprints.data, function(key,value)
+            {
+                if (sprints.data[key].phase.id == phase)
+                {
+                    response=sprints.data[key].id;
+                }
+            })
+            return response
+        }
 
      function addScrumCard(id,task,stage)
            {
@@ -244,7 +311,7 @@
 
                var resourceCount = task.taskResources != null ? task.taskResources.length : 0;
                var memo = task.memo  != null ? JSON.parse(task.memo) : {"name":"","description":"","effort":0};
-               var answer = "<div class='card draggable shadow-sm' id='card"+id+"' draggable='true' ondragstart='drag(event)'><div class='card-body p-2'><div class='card-title'><span class='float-right'>"+ resourceCount +"</span><img src='img/wd-icon-user.svg' height='24' width='24' class='rounded-circle float-right'><p class='lead font-weight-bold'>"+ task.project.descriptor + " : "+ memo.name +"</p></div><p id='type' class='font-weight-light'>" + task.projectTask.descriptor + "</p><p style='display: none;' id='description'>" + memo.description + "</p><p class='small font-weight-light' id='effort'>Effort: "+ memo.effort + " pts.</p><p id='order' style='display: none;'>"+task.order1+"</p><p id='WID' style='display: none;'>SPLIT" + task.projectPlanTask.id + "SPLIT</p><p style='display: none;' id='sprint'>" + task.projectPlanPhase.id + "</p><p style='display: none;' id='startDate'>" + task.startDate + "</p><p style='display: none;' id='endDate'>" + task.endDate + "</p><button class='btn btn-secondary btn-sm' onclick='editTask(this,\""+task.projectPlanTask.id+"\");'>Edit</button> <button class='btn btn-secondary btn-sm' onclick='moveBacklog(this,\""+task.projectPlanTask.id+"\");'>Sprint</button></div></div>"
+               var answer = "<div class='card draggable shadow-sm' id='card"+id+"' draggable='true' ondragstart='drag(event)'><div class='card-header'><span class='small font-weight-light'>"+ task.project.descriptor + "</span><span class='float-right'>"+ resourceCount +"</span><img src='img/wd-icon-user.svg' height='24' width='24' class='rounded-circle float-right'></div><div class='card-body p-2'><div class='card-title'><p class='lead font-weight-bold'>"+ memo.name +"</p></div><p id='type' class='font-weight-light'>" + task.projectTask.descriptor + "</p><p style='display: none;' id='description'>" + memo.description + "</p><p class='data' style='display: none;' id='taskData'>" + JSON.stringify(task) + "</p></div><div class='card-footer'><span class='font-weight-light effort' id='effort'>"+ memo.effort + " pts.</span><button class='btn btn-secondary btn-sm float-right' onclick='editTask(this);'>Edit</button><button class='btn btn-secondary btn-sm float-right' onclick='moveSprint(this);'>Sprint</button></div></div>"
                return answer
            }
 
