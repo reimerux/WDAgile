@@ -58,6 +58,7 @@
             <span class="container pt-3 col-sm">
             <h3 id='teamName' class="font-weight-bold text-black">Scrum Board Team</h3>
             <p id="projectButtons"></p>
+                <p id="projectButtonsTest"></p>
              </span>
             <!--<span class="container pt-3 col-sm" id="chart"></span>-->
             <div class="container pt-3 col-sm" ><span id="sprints"></span>
@@ -182,10 +183,11 @@
                         New Sprint<br>
                         <div id="newSprint"></div>
                     </div>
+                    <input id="projectID2" hidden="false" disabled>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="saveSprint();">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSprint(this);">Save changes</button>
                 </div>
             </div>
         </div>
