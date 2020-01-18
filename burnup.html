@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- javascrip library for this page-->
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/burnup.js"></script>
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="kanban.css" rel=stylesheet type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16"/>
+
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+<body>
+<nav class="navbar navbar-expand-sm sticky-top css-2t4gi3-Header__HeaderShell">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="kanban.html"><img src="img/ck-dub-logo-white.svg" height="32" width="32" alt="Workday" class="img-fluid"></a>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <button class="css-qe36ns-ButtonBase__ButtonBaseCon" id="back"
+                    onclick="window.location.href = 'kanban.html'">Back
+            </button>
+        </li>
+    </ul>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <main role="main" class="ml-sm-auto col-lg-10 pt-1">
+            <span class="container pt-3 col-sm">
+                <h3 id='projectName' class="font-weight-bold text-black">Kanban Board Project</h3>
+                <h6 id='projectOwner' class="font-weight-light text-black">Owner</h6>
+                <input id="projectID" hidden="true" value="1234">
+             </span>
+            <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
+            <h4>Data Table</h4>
+            <div class="table-responsive" id="burnupTable">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Plan</th>
+                        <th>Actual</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1,001</td>
+                        <td>Lorem</td>
+                        <td>ipsum</td>
+                    </tr>
+                    <tr>
+                        <td>1,002</td>
+                        <td>amet</td>
+                        <td>consectetur</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </main>
+        <div class="col-lg-1"></div>
+    </div>
+</div>
+</body>
+<script>
+    PageSetup();
+</script>
+</html>

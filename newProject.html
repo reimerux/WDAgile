@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Workday Kanban REST API Demo</title>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery/jquery-migrate.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- javascrip library for this page-->
+    <script src="js/jsfuncs.js"></script>
+    <script src="js/newProject.js"></script>
+
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="kanban.css" rel=stylesheet type="text/css">
+
+    <!-- Favicons -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+<body>
+
+<nav class="navbar navbar-dark navbar-expand-sm sticky-top css-2t4gi3-Header__HeaderShell">
+    <a class="navbar-brand" href="#"><img src="img/ck-dub-logo-white.svg" height="32" width="32" alt="Workday" class="img-fluid"></a>
+</nav>
+
+<p></p>
+<section class="container">
+
+
+    <h1 class="h3 mb-3 font-weight-normal">Add new Kanban Project</h1>
+
+
+    <label for="projectName" class="col-form-label">Project Name</label>
+    <input type="text" id="projectName" class="form-control" placeholder="New Project Name" required>
+    <small id="kanbanHelp" class="form-text text-muted">Determines what is shown as a name. Make sure to start with "Kanban" so it is shown on the Kanban board.</small>
+    <br>
+    <label for="projectHierarchy" class="">Project Hierarchy</label>
+    <input type="text" id="projectHierarchy" class="form-control" placeholder="Project Hierarchy WID" value="73270251dc424e14a0e4d91b9667f841" required>
+    <small id="projectHierHelp" class="form-text text-muted">Determines some configuration and security.</small>
+    <br>
+    <label for="projectID" class="">Project ID</label>
+    <input type="text" id="projectID" class="form-control" placeholder="Project WID" value="" disabled>
+    <small id="projectIDHelp" class="form-text text-muted">Holds the internal Project ID to create a phase.</small>
+
+    <br>
+    <div class="alert alert-success" id="usermsg" role="alert">
+        Project has been created successfully!
+    </div>
+    <div class="alert alert-success" id="usermsg2" role="alert">
+        Project Phase has been created successfully! You are good to go!
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" id="createProject" onclick="createProject();">Create Project</button>
+    <button class="btn btn-lg btn-primary btn-block" id="createPhase" onclick="createPhase();">Create Phase</button>
+    <button class="btn btn-lg btn-primary btn-block" id="next" onclick="window.location.href = 'kanban.html'">Back</button>
+
+
+</section>
+
+</body>
+<script>
+    loadPage();
+</script>
+</html>

@@ -76,6 +76,7 @@
 
         <button class="btn btn-md btn-primary" id="addTask" onclick="addKanbanTask();">Add new Task</button>
         <button class="btn btn-md btn-secondary" id="refresh" onclick="loadKanbanBoard($('#projectID').val());">Refresh</button>
+        <button class="btn btn-md btn-outline-secondary" id="burnup" onclick="goToBurnup($('#projectID').val());">Burn Up</button>
         <div class="small text-secondary">Drag and drop between swim lanes</div>
 
             <div id="board" class="row flex-row flex-sm-nowrap py-3">
