@@ -4,6 +4,7 @@
     var href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+workdayID%2CprojectPhaseName+FROM+projectPhase";
     phases = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),""); // make the ajax WS call - see jsfuncs.js
     buildPhaseList(phases,"kanbanSelect");
+
     $('#defaultTask').val(localStorage.getItem("defaultTask"));
  }
 
@@ -47,3 +48,4 @@
                       }
                       return false;
      }
+

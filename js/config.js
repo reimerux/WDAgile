@@ -6,6 +6,9 @@
     buildPhaseList(phases,"backlogSelect");
     $('#defaultTask').val(localStorage.getItem("defaultTask"));
     buildPhaseList(phases,"currentSprintSelect");
+     href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/resourcePlanLines/values/roleCategories";
+     categories = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),""); // make the ajax WS call - see jsfuncs.js
+     //buildCategoryList(categories)
 
     href = sessionStorage.getItem('WDTenant') + "/wql/v1/data?query=SELECT+workdayID%2CprojectRoleName+FROM+projectRoles";
     roles = REST_WCP('GET',href, sessionStorage.getItem('accessToken'),""); // make the ajax WS call - see jsfuncs.js

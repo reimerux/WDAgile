@@ -4,7 +4,7 @@
 	    {
 	        //after selecting the project on the navbar, this function loads the relevant information in the main div
 
-	        $("#projectID").val(projectID);
+	        sessionStorage.setItem('projectID',projectID) ;
 
             //load project details
             href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/projects/"+ projectID
@@ -27,6 +27,12 @@
                 $("#addTask").hide();
                 $("#progressbar").hide();
                 $("#refresh").hide();
+                $("#burnup").hide();
+
+                if (sessionStorage.getItem('projectID') != null)
+                {
+                loadProject(sessionStorage.getItem('projectID'));
+                }
             }
 
 
@@ -46,7 +52,7 @@
                 // adds a new Task with template hardcoded
 
                 //get the top level phase
-                var href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planPhases?project=" + $("#projectID").val();
+                var href = sessionStorage.getItem('WDTenant') + "/projects/v2Beta/planPhases?project=" + sessionStorage.getItem('projectID');
                 var phaseID = jQuery.parseJSON(REST_WCP('GET',href, sessionStorage.getItem('accessToken')).responseText).data[0].id; // make the ajax WS call - see jsfuncs.js
 
                 //create a new task
@@ -64,7 +70,7 @@
               var payload = { "memo": parseMemoSave( $('#taskMemo').val(), $('#taskDescription').val(), $('#taskEffort').val())};
              REST_WCP('PATCH', href, sessionStorage.getItem('accessToken'),payload); // make the ajax WS call - see jsfuncs.js
              $('#modalTask').modal('hide');
-             loadKanbanBoard($('#projectID').val());
+             loadKanbanBoard(sessionStorage.getItem('projectID'));
         }
 
     function buildKanbanBoard(resObject, req)
@@ -151,6 +157,12 @@
 
     }
 
+function SortByName(a, b){
+  var aName = a.name.toLowerCase();
+  var bName = b.name.toLowerCase();
+  return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+}
+
 
 function buildSidebarNav(resObject, req)
             {
@@ -167,6 +179,7 @@ function buildSidebarNav(resObject, req)
                            else
                            {
                            var jdata = jQuery.parseJSON(resObject.responseText);
+                           jdataSorted = jdata.data.sort(SortByName);
 
                            $.each(jdata.data, function(key, value)
                            {
@@ -180,10 +193,15 @@ function buildSidebarNav(resObject, req)
                                 }
                            });
 
-                            nav += "<div class='border-top my-3'></div><li class='nav-item'><a class='nav-link text-secondary' href='#' onClick='refreshProjects(); return false;'><img src='img/wd-icon-receipts.svg' width='24' height='24' ></img>Refresh Project list</a><a class='nav-link text-secondary' href='kanbanConfig.html'><img src='img/wd-icon-tools.svg' width='24' height='24' viewBox='0 0 24 24' fill='none' ></img>Configure</a></li><a class='nav-link text-secondary' href='index.html'><img src='img/wd-icon-home.svg' width='24' height='24' viewBox='0 0 24 24' fill='none' ></img>Back</a></li></div>";
+                            nav += "<div class='border-top my-3'></div><li class='nav-item'><a class='nav-link text-secondary' href='#' onClick='refreshProjects(); return false;'><img src='img/wd-icon-receipts.svg' width='24' height='24' ></img>Refresh Project list</a><a class='nav-link text-secondary' href='newProject.html'><img src='img/wd-icon-folder-plus.svg' width='24' height='24' viewBox='0 0 24 24' fill='none' ></img>Create new Project</a></li><a class='nav-link text-secondary' href='kanbanConfig.html'><img src='img/wd-icon-tools.svg' width='24' height='24' viewBox='0 0 24 24' fill='none' ></img>Configure</a></li><a class='nav-link text-secondary' href='index.html'><img src='img/wd-icon-home.svg' width='24' height='24' viewBox='0 0 24 24' fill='none' ></img>Back</a></li></div>";
 
                            document.getElementById("dynSide").innerHTML = nav
 
                            return false;
                          }
             }
+
+    function goToBurnup(projectID)
+    {
+        window.location.href = "burnup.html"
+    }

@@ -115,6 +115,7 @@ const drag = (event) => {
                                                     {
                                                     var jdata = jQuery.parseJSON(resource.responseText);
 
+                                                    sessionStorage.setItem('resources','');
                                                     $.each(jdata.data, function(key, value)
                                                     {
                                                          var txnName = jdata.data[key].workers != null ? jdata.data[key].workers[0].descriptor : "unknown";
@@ -122,7 +123,8 @@ const drag = (event) => {
                                                          var txnPlanID = jdata.data[key].workdayID != null ? jdata.data[key].workdayID : 0;
                                                          var txnPlanName = jdata.data[key].resourcePlanDetail.descriptor != null ? jdata.data[key].resourcePlanDetail.descriptor : "unknown";
 
-                                                         content +=  "<option value='"+txnID +":"+txnPlanID+"'>" +txnName+" ("+txnPlanName+")</option>"
+                                                         content +=  "<option value='"+txnID +":"+txnPlanID+"'>" +txnName+" ("+txnPlanName+")</option>";
+                                                         loadWorkerDetails(txnID);
 
                                                     });
 
@@ -131,6 +133,17 @@ const drag = (event) => {
                                                     document.getElementById("allResources").innerHTML = content
                                                   }
                                                   return false;
+
+    }
+
+    function loadWorkerDetails(workerID)
+    {
+      //var workerDetails ={};
+      var href = sessionStorage.getItem('WDTenant') + "/common/v1/workers/me?view=workerPublicEmailView";
+      response = REST_WCP('GET',href, sessionStorage.getItem('accessToken')); // make the ajax WS call
+
+      sessionStorage.setItem('resources',JSON.stringify(response.responseText));
+
     }
 
      function addTask()
@@ -360,11 +373,13 @@ const drag = (event) => {
               else
               {
                 var jdata = jQuery.parseJSON(resObject.responseText);
+                var owner = jdata.owner != null ? jdata.owner.descriptor : "None";
                 $("#projectName").text(jdata.name);
-                $("#projectOwner").text("Owner: "+jdata.owner.descriptor);
+                $("#projectOwner").text("Owner: "+ owner);
                 $("#addTask").show();
                 $('#progressbar').show();
                 $("#refresh").show();
+                $('#burnup').show();
               }
               return false;
        }

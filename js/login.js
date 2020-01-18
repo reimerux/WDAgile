@@ -8,8 +8,15 @@
 		var hashval = location.hash;
 		var userMsg = 'Not Currently Authenticated for Workday Access';
 		var match = hashval.match(/[?&#]access_token=([^&]*)?/);
+		var match2 = location.search; //used for User-authorization
 
+        if (match2.includes('code')) //used for User-authorization - redirect
+        {
+            sessionStorage.setItem('ClientID_User', match2.split('=')[1]);
+            window.location.href = "login_user.html"
+        }
 		if(match)
+
 		{
 			global_token = match[1];
 			saveGlobalVars();
